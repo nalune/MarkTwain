@@ -111,7 +111,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 	hInst = hInstance; // Store instance handle in our global variable
 
-	hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+	hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
 		CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
 
 	if (!hWnd)
@@ -165,13 +165,40 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_CREATE:
 		break;
 	case WM_PAINT:
+
 		hdc = BeginPaint(hWnd, &ps);
 
-		setPaintDC(hdc);
+		{
+			RECT cr;
+			GetClientRect(hWnd, &cr);
 
-		paint();
+			int width = cr.right - cr.left;
+			int height = cr.bottom - cr.top;
 
-		setPaintDC(NULL);
+			HDC bufDC;
+			HBITMAP bufBMP;
+
+			bufDC = CreateCompatibleDC(hdc);
+			bufBMP = CreateCompatibleBitmap(hdc, width, height);
+			SelectObject(bufDC, bufBMP);
+
+			setPaintDC(bufDC);
+
+			RECT r = {0};
+			r.right = width;
+			r.bottom = height;
+
+			FillRect(bufDC, &r, GetStockBrush(WHITE_BRUSH));
+
+			paint();
+
+			setPaintDC(NULL);
+
+			BitBlt(hdc, 0, 0, width, height, bufDC, 0, 0, SRCCOPY);
+
+			DeleteObject(bufBMP);
+			DeleteDC(bufDC);
+		}
 
 		EndPaint(hWnd, &ps);
 		break;
