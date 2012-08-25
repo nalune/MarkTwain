@@ -37,7 +37,8 @@ void drawLine(int x1, int y1, int x2, int y2)
 
 void drawText(int x, int y, char* text, float sizeInPts)
 {
-	
+	// hello
+
 	RECT measureRect;
 	DrawTextEx(_paintDC, text, strlen(text), &measureRect, DT_CALCRECT | DT_LEFT | DT_SINGLELINE, NULL);
 
