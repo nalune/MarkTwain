@@ -6,7 +6,14 @@
 
 void initialize()
 {
+	setTimer(1000);
 }
+
+void finalize()
+{
+	stopTimer();
+}
+
 
 static int _mouseX;
 static int _mouseY;
@@ -14,6 +21,15 @@ static int _mouseY;
 static char _pressedChar;
 
 static bool _mousePressed;
+
+static int _secondElapsed;
+
+void timerTick()
+{
+	_secondElapsed++;
+	repaintWindow();
+}
+
 
 void paint()
 {
@@ -26,6 +42,11 @@ void paint()
 
 		drawText(100, 100, str, 10);
 	}
+
+	char str[16] = {0};
+	sprintf(str, "%d", _secondElapsed);
+
+	drawText(100, 200, str, 10);
 }
 
 void keyDown(char character, int virtualKey)

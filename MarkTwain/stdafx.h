@@ -15,9 +15,13 @@
 
 // C RunTime Header Files
 #include <stdlib.h>
+#include <stdio.h>
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
 
 
 // TODO: reference additional headers your program requires here
+
+
+#define IDT_TIMER0 0

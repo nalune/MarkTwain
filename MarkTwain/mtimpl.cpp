@@ -4,22 +4,38 @@
 #include "mtapi_private.h"
 
 static HDC _paintDC;
+static HWND _hwnd;
+
+void setHWND(HWND hwnd)
+{
+	_hwnd = hwnd;
+}
 
 void setPaintDC(HDC dc)
 {
 	_paintDC = dc;
 }
 
+
+void setTimer(int durationInMs)
+{
+	SetTimer(_hwnd, IDT_TIMER0, durationInMs, NULL);
+}
+
+void stopTimer()
+{
+	KillTimer(_hwnd, IDT_TIMER0);
+}
+
+
 void repaintWindow()
 {
-	HWND hwnd = GetForegroundWindow();
-
 	RECT clientRect;
-	GetClientRect(hwnd, &clientRect);
+	GetClientRect(_hwnd, &clientRect);
 
-	InvalidateRect(hwnd, &clientRect, TRUE);
+	InvalidateRect(_hwnd, &clientRect, TRUE);
 
-	UpdateWindow(hwnd);
+	UpdateWindow(_hwnd);
 }
 
 //---------------------------------------------------------------
@@ -37,8 +53,6 @@ void drawLine(int x1, int y1, int x2, int y2)
 
 void drawText(int x, int y, char* text, float sizeInPts)
 {
-	// hello
-
 	RECT measureRect;
 	DrawTextEx(_paintDC, text, strlen(text), &measureRect, DT_CALCRECT | DT_LEFT | DT_SINGLELINE, NULL);
 

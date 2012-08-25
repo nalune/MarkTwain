@@ -2,6 +2,9 @@
 
 void exitApplication();
 
+void setTimer(int durationInMs);
+void stopTimer();
+
 void repaintWindow();
 
 int getWindowWidth();

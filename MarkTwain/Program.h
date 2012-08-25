@@ -1,6 +1,9 @@
 #pragma once
 
 void initialize();
+void finalize();
+
+void timerTick();
 
 void paint();
 
